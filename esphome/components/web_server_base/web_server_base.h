@@ -23,7 +23,11 @@ class MiddlewareHandler : public AsyncWebHandler {
  public:
   MiddlewareHandler(AsyncWebHandler *next) : next_(next) {}
 
+#ifdef USE_ESPASYNCWEBSERVER_V3_6_0
+  bool canHandle(AsyncWebServerRequest *request) const override { return next_->canHandle(request); }
+#else
   bool canHandle(AsyncWebServerRequest *request) override { return next_->canHandle(request); }
+#endif
   void handleRequest(AsyncWebServerRequest *request) override { next_->handleRequest(request); }
   void handleUpload(AsyncWebServerRequest *request, const String &filename, size_t index, uint8_t *data, size_t len,
                     bool final) override {
@@ -32,7 +36,11 @@ class MiddlewareHandler : public AsyncWebHandler {
   void handleBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) override {
     next_->handleBody(request, data, len, index, total);
   }
+#ifdef USE_ESPASYNCWEBSERVER_V3_6_0
+  bool isRequestHandlerTrivial() const override { return next_->isRequestHandlerTrivial(); }
+#else
   bool isRequestHandlerTrivial() override { return next_->isRequestHandlerTrivial(); }
+#endif
 
  protected:
   AsyncWebHandler *next_;
@@ -131,12 +139,23 @@ class OTARequestHandler : public AsyncWebHandler {
   void handleRequest(AsyncWebServerRequest *request) override;
   void handleUpload(AsyncWebServerRequest *request, const String &filename, size_t index, uint8_t *data, size_t len,
                     bool final) override;
+#ifdef USE_ESPASYNCWEBSERVER_V3_6_0
+  bool canHandle(AsyncWebServerRequest *request) const override {
+    return request->url() == "/update" && request->method() == HTTP_POST;
+  }
+#else
   bool canHandle(AsyncWebServerRequest *request) override {
     return request->url() == "/update" && request->method() == HTTP_POST;
   }
+#endif
 
+#ifdef USE_ESPASYNCWEBSERVER_V3_6_0
+  // NOLINTNEXTLINE(readability-identifier-naming)
+  bool isRequestHandlerTrivial() const override { return false; }
+#else
   // NOLINTNEXTLINE(readability-identifier-naming)
   bool isRequestHandlerTrivial() override { return false; }
+#endif
 
  protected:
   uint32_t last_ota_progress_{0};

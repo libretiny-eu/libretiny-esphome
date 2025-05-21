@@ -36,5 +36,10 @@ async def to_code(config):
             cg.add_library("WiFi", None)
             cg.add_library("FS", None)
             cg.add_library("Update", None)
-        # https://github.com/esphome/ESPAsyncWebServer/blob/master/library.json
-        cg.add_library("esphome/ESPAsyncWebServer-esphome", "3.3.0")
+        if CORE.is_rp2040:
+            # https://github.com/ESP32Async/ESPAsyncWebServer/blob/main/library.json
+            cg.add_library("ESP32Async/ESPAsyncWebServer", "3.7.7")
+            cg.add_define("USE_ESPASYNCWEBSERVER_V3_6_0")
+        else:
+            # https://github.com/esphome/ESPAsyncWebServer/blob/master/library.json
+            cg.add_library("esphome/ESPAsyncWebServer-esphome", "3.3.0")
