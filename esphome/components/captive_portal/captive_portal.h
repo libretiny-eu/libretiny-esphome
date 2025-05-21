@@ -37,7 +37,11 @@ class CaptivePortal : public AsyncWebHandler, public Component {
 #endif
   }
 
+#ifdef USE_ESPASYNCWEBSERVER_V3_6_0
+  bool canHandle(AsyncWebServerRequest *request) const override {
+#else
   bool canHandle(AsyncWebServerRequest *request) override {
+#endif
     if (!this->active_)
       return false;
 
