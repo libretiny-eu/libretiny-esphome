@@ -68,7 +68,7 @@ void CaptivePortal::start() {
 
 void CaptivePortal::handleRequest(AsyncWebServerRequest *req) {
   if (req->url() == "/") {
-#ifdef USE_ESPASYNCWEBSERVER_V3_6_0
+#ifndef USE_ESP8266
     auto *response = req->beginResponse(200, "text/html", INDEX_GZ, sizeof(INDEX_GZ));
 #else
     auto *response = req->beginResponse_P(200, "text/html", INDEX_GZ, sizeof(INDEX_GZ));

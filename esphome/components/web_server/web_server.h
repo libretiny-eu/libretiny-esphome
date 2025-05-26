@@ -99,11 +99,7 @@ class DeferredUpdateEventSource : public AsyncEventSource {
  protected:
   // surface a couple methods from the base class
   using AsyncEventSource::handleRequest;
-#ifdef USE_ESPASYNCWEBSERVER_V3_6_0
   using AsyncEventSource::send;
-#else
-  using AsyncEventSource::try_send;
-#endif
 
   ListEntitiesIterator entities_iterator_;
   // vector is used very specifically for its zero memory overhead even though items are popped from the front (memory
@@ -472,19 +468,11 @@ class WebServer : public Controller, public Component, public AsyncWebHandler {
 #endif
 
   /// Override the web handler's canHandle method.
-#ifdef USE_ESPASYNCWEBSERVER_V3_6_0
   bool canHandle(AsyncWebServerRequest *request) const override;
-#else
-  bool canHandle(AsyncWebServerRequest *request) override;
-#endif
   /// Override the web handler's handleRequest method.
   void handleRequest(AsyncWebServerRequest *request) override;
   /// This web handle is not trivial.
-#ifdef USE_ESPASYNCWEBSERVER_V3_6_0
   bool isRequestHandlerTrivial() const override;  // NOLINT(readability-identifier-naming)
-#else
-  bool isRequestHandlerTrivial() override;  // NOLINT(readability-identifier-naming)
-#endif
 
   void add_entity_config(EntityBase *entity, float weight, uint64_t group);
   void add_sorting_group(uint64_t group_id, const std::string &group_name, float weight);
