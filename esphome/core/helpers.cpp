@@ -27,6 +27,9 @@
 #include <Arduino.h>
 #elif defined(USE_ESP32_FRAMEWORK_ARDUINO)
 #include <Esp.h>
+#if defined(USE_ESP32_VARIANT_ESP32C2)
+#include <esp_mac.h>
+#endif
 #elif defined(USE_ESP_IDF)
 #include <freertos/FreeRTOS.h>
 #include <freertos/portmacro.h>

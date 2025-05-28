@@ -3,12 +3,13 @@
 #include "esphome/core/defines.h"
 #ifdef USE_MD5
 
-#ifdef USE_ESP_IDF
+#if defined(USE_ESP_IDF) || defined(USE_ESP32_VARIANT_ESP32C2)
+// ESP32-C2 doesn't have ROM MD5, so use IDF's wrapper around mbedTLS
 #include "esp_rom_md5.h"
 #define MD5_CTX_TYPE md5_context_t
 #endif
 
-#if defined(USE_ARDUINO) && defined(USE_ESP32)
+#if defined(USE_ARDUINO) && defined(USE_ESP32) && !defined(USE_ESP32_VARIANT_ESP32C2)
 #include "rom/md5_hash.h"
 #define MD5_CTX_TYPE MD5Context
 #endif
